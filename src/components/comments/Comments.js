@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import CommentsList from "../../components/comments/CommentsList";
@@ -15,6 +15,7 @@ const Comments = () => {
   const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
 
   const { quoteId } = params;
+
   useEffect(() => {
     sendRequest(quoteId);
   }, [quoteId, sendRequest]);
@@ -23,7 +24,9 @@ const Comments = () => {
     setIsAddingComment(true);
   };
 
-  const addedCommentHandler = () => {};
+  const addedCommentHandler = useCallback(() => {
+    sendRequest(quoteId);
+  }, [sendRequest, quoteId]);
 
   let comments;
 
